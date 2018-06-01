@@ -45,4 +45,18 @@ app.put('/edit', function(req, res, next) {
     })
 })
 
+app.delete('/delete', function (req, res) {
+    req.getConnection(function(error, conn) {
+        let id = req.body.id;
+    
+        if (!id) {
+            return res.status(400).send({ error: true, message: 'Please provide id' });
+        }
+        conn.query('DELETE FROM pots WHERE id = ?', [id], function (error, results, fields) {
+            if (error) throw error;
+            return res.send({ error: false, data: results, message: 'Pot has been deleted successfully.' });
+        });
+    })
+});   
+
 module.exports = app
